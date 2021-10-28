@@ -1,0 +1,10 @@
+#Cargamos nuestra base de datos a un DataFrame de pandas al que renombramos "df" mediante la creacion de una nueva variable
+pd.read_csv("/Users/elCONDEMARI/Desktop/Python/mmALL_073119_csv.csv")
+df=pd.read_csv("/Users/elCONDEMARI/Desktop/Python/mmALL_073119_csv.csv")
+print(df)
+
+#Vemos la cantidad de filas y columnas
+df.shape()
+
+#Vemos los tipos de variable y otra info
+df.info()
