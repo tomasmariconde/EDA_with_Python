@@ -1,0 +1,26 @@
+#PASO 4 - Preparacion de datos para su graficación
+#Duración de las protestas (¿Fueron mas largas que la Argentina?)
+#Calculamos la duración exacta de las protestas y creamos una nueva columna llamada "daysofconflict"
+df["daysofconflict"]=df["enddate"]-df["startdate"]
+print(df)
+
+#Convertimos los días de la columna "daysofconflict" en int
+df["daysofconflict"]=df["daysofconflict"].astype(str)
+df["daysofconflict"]=df["daysofconflict"].str.strip("days").astype(int)
+
+#Extension territorial de las protestas (¿Se extendieron mayoritariamente a nivel nacional?)
+#Reenombramos todos aquellos valores similares a "National level" para que queden todos bajo ese mismo nombre
+df["location"]=df["location"].replace({"national":"National level", "National":"National level", "national level":"National level", "nation wide":"National level", "Nation wide":"National level", "nationwide":"National level"})
+print(df)
+
+#Reemplazamos todas las localidades que no sean "National level" por "Local level" ya que solo nos interesa saber si fueron a nivel nacional o a nivel local, mas no las especificidades de estas ultimas
+location_changes=df["location"]!="National level"
+df.loc[location_changes, "location"]="Local level"
+print(df)
+
+#Virulencia de las protestas (¿Participaron los manifestantes en actos de violencia contra el Estado?)
+#Reemplazamos los valores 0 y 1 por las respuesta "No" y "Si" respectivamente (asumiendo que esos valores corresponden a esas respuestas en base al manual de usuario compartido, en particular la variable "protest" de similar construccion)
+df["protesterviolence"]=df["protesterviolence"].replace({1:"Si"})
+protesterviolence_changes=df["protesterviolence"]!= "Si"
+df.loc[protesterviolence_changes, "protesterviolence"]= "No"
+print(protesterviolence_changes)
