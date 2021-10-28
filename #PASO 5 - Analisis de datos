@@ -1,0 +1,42 @@
+#PASO 5 - Analisis de datos
+#Duración de las protestas (¿Fueron las protestas mas largas que la argentina del 2008?)
+#Obtenemos información general como ser el promedio
+print(df.daysofconflict.describe())
+print("El promedio de duracion de las protestas es de:", df.daysofconflict.mean())
+print("La mediana de duracion de las protestas es:", df.daysofconflict.median())
+print("El valor minimo de duracion de las protestas es", df.daysofconflict.min())
+print("El valor maximo de duracion de las protestas es", df.daysofconflict.max())
+
+#Graficamos la distribucion de los valores
+fig, ay = plt.subplots()
+ay.boxplot(df.daysofconflict) 
+plt.show()
+
+#Duplicamos la columna "daysofconflict" en una nueva que creamos llamada "daysofconflict_duplicated". En ella intercambiamos los elementos originales por nuevas categorias que los agrupan, que nos permiten graficar un "pie" mas legible. 
+dayofconflict_conditions=[
+    (df["daysofconflict"]<1),
+    (df["daysofconflict"]>=1) & (df["daysofconflict"]<=5),
+    (df["daysofconflict"]>5) & (df["daysofconflict"]<=10),
+    (df["daysofconflict"]>=11)
+    ]
+daysofconflict_values=["Menos de 24 hs", "Entre 1 y 5 dias", "Entre 6 y 10 dias", "Mas de 10 dias"]
+df["daysofconflict_duplicated"]=np.select(dayofconflict_conditions, daysofconflict_values)
+colors=["#EE6055","#60D394","#AAF683","#FFD97D"]
+desfase= (0.1, 0, 0, 0)
+daysofconlict_duplicated_plot=df["daysofconflict_duplicated"].value_counts().plot(kind="pie",colors=colors, explode=desfase, autopct="%1.1f%%", fontsize=12, figsize=(6,6), title="Duracion de las protestas")
+plt.show()
+
+#Extension territorial de las protestas (¿Se extendieron las protestas mayoritariamente a nivel nacional?)
+location_plot=df["location"].value_counts().plot(kind="barh", color="cadetblue", fontsize=12, figsize=(6,6), title="Distribucion territorial de las protestas")
+plt.show()
+
+#Virulencia de las protestas (¿Participaron los manifestantes de actos de violencia contra el Estado?)
+colors2=["#6B8ba4","#9dbcd4"]
+desfase2 = (0.1, 0)
+protesterviolence_plot=df["protesterviolence"].value_counts().plot(kind="pie",colors=colors2, explode=desfase2, fontsize=12, autopct="%1.1f%%", figsize=(6,6), title="¿Participaron los manifestantes de actos de violencia contra el Estado?")
+plt.show()
+
+#Respuesta frente a las protestas (¿Cuál fue la primera respuesta más extendida por parte de los Estados frente al conflicto?)
+stateresponse1_plot=df["stateresponse1"].value_counts().plot(kind="bar", color="palegreen", fontsize=12, figsize=(6,6), title="¿Cuál fue la primera respuesta más extendida por parte de los Estados frente al conflicto?")
+plt.xticks(rotation=75)
+plt.show()
